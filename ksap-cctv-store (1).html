@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KSAP CCTV Solutions – Smart Security Store</title>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Exo+2:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --red: #e31c1c;
+  --red-dark: #b01010;
+  --black: #0a0a0a;
+  --dark: #111318;
+  --card: #16191f;
+  --card2: #1c2028;
+  --border: #2a2f3a;
+  --text: #e8eaf0;
+  --muted: #8891a4;
+  --accent: #f0c020;
+  --white: #ffffff;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Exo 2', sans-serif;
+  background: var(--black);
+  color: var(--text);
+  overflow-x: hidden;
+}
+
+/* ===== SCANLINE OVERLAY ===== */
+body::before {
+  content:'';
+  position:fixed; inset:0;
+  background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.03) 2px, rgba(0,0,0,0.03) 4px);
+  pointer-events:none; z-index:9999;
+}
+
+/* ===== NAV ===== */
+nav {
+  position: sticky; top:0; z-index:100;
+  background: rgba(10,10,10,0.92);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  padding: 0 2rem;
+  display: flex; align-items:center; justify-content:space-between;
+  height: 64px;
+}
+.nav-logo {
+  display:flex; align-items:center; gap:0.75rem;
+}
+.nav-logo-box {
+  border: 2px solid var(--red);
+  padding: 4px 10px;
+  font-family:'Rajdhani',sans-serif;
+  font-size:1.3rem; font-weight:700;
+  letter-spacing:2px; color:var(--white);
+  display:flex; align-items:center; gap:6px;
+}
+.nav-logo-box span { color:var(--red); }
+.nav-sub { font-size:0.65rem; color:var(--muted); letter-spacing:3px; text-transform:uppercase; }
+.nav-links { display:flex; gap:2rem; }
+.nav-links a {
+  text-decoration:none; color:var(--muted);
+  font-size:0.85rem; letter-spacing:1px; text-transform:uppercase;
+  transition:color 0.2s;
+}
+.nav-links a:hover { color:var(--red); }
+.nav-cta {
+  background:var(--red); color:#fff; border:none;
+  padding: 8px 20px; font-family:'Rajdhani',sans-serif;
+  font-size:0.9rem; font-weight:600; letter-spacing:2px;
+  cursor:pointer; text-transform:uppercase; transition:background 0.2s;
+  clip-path: polygon(8px 0%,100% 0%,calc(100% - 8px) 100%,0% 100%);
+}
+.nav-cta:hover { background:var(--red-dark); }
+
+/* ===== HERO ===== */
+.hero {
+  min-height: 92vh;
+  background: linear-gradient(135deg, #0a0a0a 0%, #0f1318 50%, #0a0a0a 100%);
+  display:flex; align-items:center; justify-content:center;
+  position:relative; overflow:hidden; text-align:center; padding:4rem 2rem;
+}
+.hero-grid {
+  position:absolute; inset:0;
+  background-image: linear-gradient(var(--border) 1px, transparent 1px), linear-gradient(90deg, var(--border) 1px, transparent 1px);
+  background-size: 60px 60px;
+  opacity:0.3;
+}
+.hero-glow {
+  position:absolute; top:20%; left:50%; transform:translateX(-50%);
+  width:600px; height:400px;
+  background: radial-gradient(ellipse, rgba(227,28,28,0.15) 0%, transparent 70%);
+  pointer-events:none;
+}
+.hero-content { position:relative; z-index:2; max-width:800px; }
+.hero-badge {
+  display:inline-block; padding:4px 16px;
+  border: 1px solid var(--red); color:var(--red);
+  font-size:0.7rem; letter-spacing:4px; text-transform:uppercase;
+  margin-bottom:1.5rem; font-family:'Rajdhani',sans-serif;
+}
+.hero h1 {
+  font-family:'Rajdhani',sans-serif; font-size:clamp(3rem,7vw,5.5rem);
+  font-weight:700; line-height:1; letter-spacing:2px;
+  color:var(--white); text-transform:uppercase;
+}
+.hero h1 .red { color:var(--red); }
+.hero p {
+  margin-top:1.5rem; color:var(--muted); font-size:1.1rem;
+  line-height:1.7; max-width:550px; margin-inline:auto;
+}
+.hero-btns { margin-top:2.5rem; display:flex; gap:1rem; justify-content:center; flex-wrap:wrap; }
+.btn-primary {
+  background:var(--red); color:#fff; border:none; padding:14px 32px;
+  font-family:'Rajdhani',sans-serif; font-size:1rem; font-weight:700;
+  letter-spacing:2px; text-transform:uppercase; cursor:pointer;
+  clip-path: polygon(12px 0%,100% 0%,calc(100% - 12px) 100%,0% 100%);
+  transition:background 0.2s, transform 0.2s; text-decoration:none; display:inline-block;
+}
+.btn-primary:hover { background:var(--red-dark); transform:translateY(-2px); }
+.btn-outline {
+  background:transparent; color:var(--text); border:1px solid var(--border);
+  padding:14px 32px; font-family:'Rajdhani',sans-serif; font-size:1rem;
+  font-weight:600; letter-spacing:2px; text-transform:uppercase; cursor:pointer;
+  transition:border-color 0.2s, color 0.2s; text-decoration:none; display:inline-block;
+}
+.btn-outline:hover { border-color:var(--red); color:var(--red); }
+.hero-stats {
+  margin-top:4rem; display:flex; gap:3rem; justify-content:center; flex-wrap:wrap;
+}
+.stat { text-align:center; }
+.stat-num { font-family:'Rajdhani',sans-serif; font-size:2rem; font-weight:700; color:var(--red); }
+.stat-label { font-size:0.7rem; color:var(--muted); letter-spacing:2px; text-transform:uppercase; margin-top:2px; }
+
+/* ===== BRANDS ===== */
+.brands {
+  padding: 2rem; background:var(--dark);
+  border-top:1px solid var(--border); border-bottom:1px solid var(--border);
+  display:flex; align-items:center; gap:3rem; justify-content:center; flex-wrap:wrap;
+}
+.brands-label { font-size:0.65rem; color:var(--muted); letter-spacing:3px; text-transform:uppercase; white-space:nowrap; }
+.brand-item { color:var(--muted); font-family:'Rajdhani',sans-serif; font-size:1rem; font-weight:600; letter-spacing:2px; opacity:0.6; transition:opacity 0.2s; }
+.brand-item:hover { opacity:1; color:var(--text); }
+
+/* ===== SECTION ===== */
+section { padding:5rem 2rem; max-width:1300px; margin:0 auto; }
+.section-head { text-align:center; margin-bottom:3rem; }
+.section-tag {
+  display:inline-block; color:var(--red); font-size:0.7rem;
+  letter-spacing:4px; text-transform:uppercase; margin-bottom:0.75rem;
+  font-family:'Rajdhani',sans-serif;
+}
+.section-head h2 {
+  font-family:'Rajdhani',sans-serif; font-size:clamp(2rem,4vw,3rem);
+  font-weight:700; color:var(--white); text-transform:uppercase; letter-spacing:2px;
+}
+.section-head p { color:var(--muted); margin-top:0.75rem; max-width:500px; margin-inline:auto; }
+
+/* ===== PRODUCT GRID ===== */
+.products-wrapper { padding:5rem 2rem; background:var(--dark); }
+.products-wrapper > .section-head { max-width:1300px; margin:0 auto 3rem; }
+.product-grid {
+  max-width:1300px; margin:0 auto;
+  display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:1.5rem;
+}
+
+/* filter tabs */
+.filter-tabs {
+  display:flex; gap:0.5rem; justify-content:center; flex-wrap:wrap; margin-bottom:2.5rem;
+}
+.filter-btn {
+  background:transparent; border:1px solid var(--border); color:var(--muted);
+  padding:7px 18px; font-family:'Rajdhani',sans-serif; font-size:0.85rem;
+  letter-spacing:1px; text-transform:uppercase; cursor:pointer; transition:all 0.2s;
+}
+.filter-btn.active, .filter-btn:hover {
+  background:var(--red); border-color:var(--red); color:#fff;
+}
+
+.product-card {
+  background:var(--card); border:1px solid var(--border);
+  overflow:hidden; transition:transform 0.3s, border-color 0.3s;
+  cursor:pointer; display:flex; flex-direction:column;
+}
+.product-card:hover { transform:translateY(-6px); border-color:var(--red); }
+.product-img {
+  width:100%; aspect-ratio:3/4; overflow:hidden;
+  background:#0d0f14; position:relative;
+}
+.product-img img { width:100%; height:100%; object-fit:cover; transition:transform 0.4s; }
+.product-card:hover .product-img img { transform:scale(1.05); }
+.product-badge {
+  position:absolute; top:12px; left:0;
+  background:var(--red); color:#fff;
+  padding:3px 12px; font-size:0.65rem; letter-spacing:2px;
+  font-family:'Rajdhani',sans-serif; text-transform:uppercase;
+  clip-path: polygon(0 0, 100% 0, calc(100% - 8px) 100%, 0 100%);
+}
+.product-info { padding:1.25rem; flex:1; display:flex; flex-direction:column; }
+.product-cat { font-size:0.65rem; color:var(--red); letter-spacing:2px; text-transform:uppercase; margin-bottom:4px; }
+.product-name { font-family:'Rajdhani',sans-serif; font-size:1.1rem; font-weight:700; color:var(--white); text-transform:uppercase; }
+.product-desc { font-size:0.8rem; color:var(--muted); margin-top:6px; line-height:1.5; flex:1; }
+.product-features { margin-top:10px; display:flex; flex-wrap:wrap; gap:4px; }
+.feat-tag {
+  font-size:0.6rem; padding:2px 8px; border:1px solid var(--border);
+  color:var(--muted); letter-spacing:1px; text-transform:uppercase; font-family:'Rajdhani',sans-serif;
+}
+.product-footer {
+  display:flex; align-items:center; justify-content:space-between;
+  margin-top:1rem; padding-top:1rem; border-top:1px solid var(--border);
+}
+.product-price { font-family:'Rajdhani',sans-serif; font-size:1rem; color:var(--accent); font-weight:700; }
+.btn-inquire {
+  background:var(--red); color:#fff; border:none; padding:7px 16px;
+  font-family:'Rajdhani',sans-serif; font-size:0.8rem; font-weight:700;
+  letter-spacing:1px; text-transform:uppercase; cursor:pointer;
+  clip-path: polygon(6px 0%,100% 0%,calc(100% - 6px) 100%,0% 100%);
+  transition:background 0.2s;
+}
+.btn-inquire:hover { background:var(--red-dark); }
+
+/* ===== SERVICES ===== */
+.services-grid {
+  display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:1.5rem;
+}
+.service-card {
+  background:var(--card); border:1px solid var(--border); padding:2rem;
+  transition:border-color 0.3s; position:relative; overflow:hidden;
+}
+.service-card::before {
+  content:''; position:absolute; top:0; left:0; width:3px; height:0;
+  background:var(--red); transition:height 0.3s;
+}
+.service-card:hover::before { height:100%; }
+.service-card:hover { border-color:var(--red); }
+.service-icon { font-size:2rem; margin-bottom:1rem; }
+.service-card h3 { font-family:'Rajdhani',sans-serif; font-size:1.2rem; font-weight:700; text-transform:uppercase; letter-spacing:1px; color:var(--white); }
+.service-card p { color:var(--muted); font-size:0.85rem; line-height:1.6; margin-top:0.5rem; }
+
+/* ===== WHY US ===== */
+.whyus { background:var(--dark); padding:5rem 2rem; }
+.whyus-inner { max-width:1300px; margin:0 auto; display:grid; grid-template-columns:1fr 1fr; gap:4rem; align-items:center; }
+.whyus-text h2 { font-family:'Rajdhani',sans-serif; font-size:2.5rem; font-weight:700; color:var(--white); text-transform:uppercase; line-height:1.1; }
+.whyus-text h2 .red { color:var(--red); }
+.whyus-text p { color:var(--muted); margin-top:1rem; line-height:1.7; }
+.whyus-points { margin-top:2rem; display:flex; flex-direction:column; gap:1rem; }
+.why-point { display:flex; gap:1rem; align-items:flex-start; }
+.why-num { font-family:'Rajdhani',sans-serif; font-size:2rem; font-weight:700; color:var(--red); opacity:0.4; line-height:1; min-width:40px; }
+.why-point h4 { font-family:'Rajdhani',sans-serif; font-size:1rem; font-weight:700; text-transform:uppercase; color:var(--white); }
+.why-point p { font-size:0.82rem; color:var(--muted); margin-top:2px; }
+.whyus-brands { display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
+.brand-card {
+  background:var(--card2); border:1px solid var(--border); padding:1.5rem;
+  text-align:center; transition:border-color 0.2s;
+}
+.brand-card:hover { border-color:var(--red); }
+.brand-card .bname { font-family:'Rajdhani',sans-serif; font-size:1.2rem; font-weight:700; color:var(--white); }
+.brand-card .bsub { font-size:0.65rem; color:var(--muted); letter-spacing:2px; text-transform:uppercase; margin-top:4px; }
+
+/* ===== INQUIRE SECTION ===== */
+.inquire-section {
+  padding:5rem 2rem;
+  background: linear-gradient(135deg, #0a0a0a 0%, #120808 100%);
+  border-top:1px solid var(--border);
+}
+.inquire-inner { max-width:900px; margin:0 auto; text-align:center; }
+.inquire-inner h2 { font-family:'Rajdhani',sans-serif; font-size:clamp(2rem,4vw,3rem); font-weight:700; color:var(--white); text-transform:uppercase; }
+.inquire-inner p { color:var(--muted); margin-top:1rem; line-height:1.7; }
+.inquire-grid { display:grid; grid-template-columns:1fr 1fr; gap:3rem; margin-top:3rem; align-items:center; }
+.qr-box {
+  background:var(--card); border:1px solid var(--border); padding:2rem;
+  display:flex; flex-direction:column; align-items:center; gap:1rem;
+}
+.qr-box img { width:200px; height:200px; object-fit:contain; background:#fff; padding:8px; }
+.qr-box p { font-size:0.75rem; color:var(--muted); letter-spacing:2px; text-transform:uppercase; font-family:'Rajdhani',sans-serif; }
+.contact-info { text-align:left; display:flex; flex-direction:column; gap:1.5rem; }
+.contact-row { display:flex; gap:1rem; align-items:flex-start; }
+.contact-icon { font-size:1.5rem; color:var(--red); min-width:36px; }
+.contact-row h4 { font-family:'Rajdhani',sans-serif; font-size:0.9rem; font-weight:700; text-transform:uppercase; color:var(--white); }
+.contact-row p { font-size:0.85rem; color:var(--muted); margin-top:2px; }
+
+/* ===== MODAL ===== */
+.modal-overlay {
+  position:fixed; inset:0; background:rgba(0,0,0,0.85); z-index:1000;
+  display:none; align-items:center; justify-content:center; padding:1rem;
+}
+.modal-overlay.open { display:flex; }
+.modal {
+  background:var(--card); border:1px solid var(--border); max-width:500px; width:100%;
+  padding:2rem; position:relative; animation:modalIn 0.3s ease;
+}
+@keyframes modalIn { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+.modal-close {
+  position:absolute; top:1rem; right:1rem; background:none; border:none;
+  color:var(--muted); font-size:1.5rem; cursor:pointer;
+}
+.modal-close:hover { color:var(--red); }
+.modal h3 { font-family:'Rajdhani',sans-serif; font-size:1.5rem; font-weight:700; color:var(--white); text-transform:uppercase; }
+.modal-product { font-size:0.8rem; color:var(--red); letter-spacing:2px; text-transform:uppercase; margin-bottom:1rem; }
+.modal label { display:block; font-size:0.75rem; color:var(--muted); letter-spacing:1px; text-transform:uppercase; margin-bottom:4px; margin-top:1rem; }
+.modal input, .modal textarea, .modal select {
+  width:100%; background:#0d0f14; border:1px solid var(--border); color:var(--text);
+  padding:10px 12px; font-family:'Exo 2',sans-serif; font-size:0.9rem; outline:none;
+  transition:border-color 0.2s;
+}
+.modal input:focus, .modal textarea:focus, .modal select:focus { border-color:var(--red); }
+.modal textarea { height:90px; resize:vertical; }
+.modal-footer { margin-top:1.5rem; display:flex; gap:1rem; }
+.btn-submit {
+  flex:1; background:var(--red); color:#fff; border:none; padding:12px;
+  font-family:'Rajdhani',sans-serif; font-size:1rem; font-weight:700;
+  letter-spacing:2px; text-transform:uppercase; cursor:pointer; transition:background 0.2s;
+}
+.btn-submit:hover { background:var(--red-dark); }
+
+/* ===== FOOTER ===== */
+footer {
+  background:var(--dark); border-top:1px solid var(--border);
+  padding:3rem 2rem; text-align:center;
+}
+.footer-logo { font-family:'Rajdhani',sans-serif; font-size:1.4rem; font-weight:700; color:var(--white); letter-spacing:3px; }
+.footer-logo span { color:var(--red); }
+.footer-tagline { color:var(--muted); font-size:0.75rem; letter-spacing:3px; text-transform:uppercase; margin-top:4px; }
+.footer-links { display:flex; gap:2rem; justify-content:center; flex-wrap:wrap; margin-top:1.5rem; }
+.footer-links a { color:var(--muted); font-size:0.8rem; text-decoration:none; transition:color 0.2s; }
+.footer-links a:hover { color:var(--red); }
+.footer-copy { color:var(--muted); font-size:0.7rem; margin-top:2rem; }
+
+/* ===== RESPONSIVE ===== */
+@media(max-width:768px) {
+  .nav-links { display:none; }
+  .whyus-inner, .inquire-grid { grid-template-columns:1fr; }
+  .whyus-brands { grid-template-columns:1fr 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">
+    <div class="nav-logo-box">📹 <span>KSAP</span></div>
+    <div class="nav-sub">CCTV Solutions</div>
+  </div>
+  <div class="nav-links">
+    <a href="#products">Products</a>
+    <a href="#services">Services</a>
+    <a href="#whyus">Why Us</a>
+    <a href="#inquire">Contact</a>
+  </div>
+  <button class="nav-cta" onclick="openModal('General Inquiry')">Inquire Now</button>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-content">
+    <div class="hero-badge">Authorized Dahua Distributor</div>
+    <h1>Protect What<br><span class="red">Matters Most</span></h1>
+    <p>Professional CCTV installation and smart security systems for homes, businesses, and enterprises. Powered by Dahua Technology.</p>
+    <div class="hero-btns">
+      <a href="#products" class="btn-primary">Shop Products</a>
+      <a href="#inquire" class="btn-outline">Get a Free Quote</a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat"><div class="stat-num">500+</div><div class="stat-label">Installations</div></div>
+      <div class="stat"><div class="stat-num">24/7</div><div class="stat-label">Support</div></div>
+      <div class="stat"><div class="stat-num">8+</div><div class="stat-label">Top Brands</div></div>
+      <div class="stat"><div class="stat-num">100%</div><div class="stat-label">Satisfaction</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- BRANDS -->
+<div class="brands">
+  <div class="brands-label">Authorized Partner</div>
+  <div class="brand-item">DAHUA</div>
+  <div class="brand-item">HIKVISION</div>
+  <div class="brand-item">IMOU</div>
+  <div class="brand-item">SEAGATE</div>
+  <div class="brand-item">ZKTECO</div>
+  <div class="brand-item">RUIJIE REYEE</div>
+</div>
+
+<!-- PRODUCTS -->
+<div class="products-wrapper" id="products">
+  <div class="section-head">
+    <div class="section-tag">// Our Products</div>
+    <h2>Security Camera Lineup</h2>
+    <p>Professional-grade cameras for every environment — indoor, outdoor, and enterprise.</p>
+  </div>
+
+  <div class="filter-tabs">
+    <button class="filter-btn active" onclick="filterProducts('all',this)">All</button>
+    <button class="filter-btn" onclick="filterProducts('indoor',this)">Indoor</button>
+    <button class="filter-btn" onclick="filterProducts('outdoor',this)">Outdoor</button>
+    <button class="filter-btn" onclick="filterProducts('wifi',this)">WiFi</button>
+    <button class="filter-btn" onclick="filterProducts('ptz',this)">PTZ</button>
+  </div>
+
+  <div class="product-grid" id="productGrid">
+
+    <!-- Hero H31 -->
+    <div class="product-card" data-tags="indoor wifi">
+      <div class="product-img">
+        <img src="/mnt/user-data/uploads/12.png" alt="Hero Series H31">
+        <div class="product-badge">WiFi 6</div>
+      </div>
+      <div class="product-info">
+        <div class="product-cat">Indoor · Wireless</div>
+        <div class="product-name">Hero Series H31</div>
+        <div class="product-desc">360° pan-tilt WiFi 6 camera with AI human & pet detection, cloud storage, and auto smart tracking.</div>
+        <div class="product-features">
+          <span class="feat-tag">360° PT</span>
+          <span class="feat-tag">AI Detection</span>
+          <span class="feat-tag">Cloud DVR</span>
+          <span class="feat-tag">Two-Way Talk</span>
+        </div>
+        <div class="product-footer">
+          <div class="product-price">Inquire for Price</div>
+          <button class="btn-inquire" onclick="openModal('Hero Series H31')">Inquire</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- DH-H3A/H5A -->
+    <div class="product-card" data-tags="indoor wifi">
+      <div class="product-img">
+        <img src="/mnt/user-data/uploads/6.png" alt="DH-H3A/H5A">
+        <div class="product-badge">Smart Home</div>
+      </div>
+      <div class="product-info">
+        <div class="product-cat">Indoor · Wireless</div>
+        <div class="product-name">DH-H3A / H5A</div>
+        <div class="product-desc">Smart home security with AI human detection, smart night vision, and real-time mobile app control.</div>
+        <div class="product-features">
+          <span class="feat-tag">AI Human</span>
+          <span class="feat-tag">Night Vision</span>
+          <span class="feat-tag">360° PT</span>
+          <span class="feat-tag">App Control</span>
+        </div>
+        <div class="product-footer">
+          <div class="product-price">Inquire for Price</div>
+          <button class="btn-inquire" onclick="openModal('DH-H3A/H5A Smart Home Security')">Inquire</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- PICOO Outdoor -->
+    <div class="product-card" data-tags="outdoor wifi ptz">
+      <div class="product-img">
+        <img src="/mnt/user-data/uploads/7.png" alt="PICOO Outdoor">
+        <div class="product-badge">Outdoor PTZ</div>
+      </div>
+      <div class="product-info">
+        <div class="product-cat">Outdoor · PTZ</div>
+        <div class="product-name">PICOO Outdoor</div>
+        <div class="product-desc">Smart dual-light PTZ with AI detection, active deterrence using blue/red lights, and smart camera linkage.</div>
+        <div class="product-features">
+          <span class="feat-tag">Dual Light</span>
+          <span class="feat-tag">AI Detection</span>
+          <span class="feat-tag">PTZ</span>
+          <span class="feat-tag">Deterrence</span>
+        </div>
+        <div class="product-footer">
+          <div class="product-price">Inquire for Price</div>
+          <button class="btn-inquire" onclick="openModal('PICOO Outdoor Smart Dual Light PTZ')">Inquire</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Outdoor Standard PTZ -->
+    <div class="product-card" data-tags="outdoor wifi ptz">
+      <div class="product-img">
+        <img src="/mnt/user-data/uploads/8.png" alt="Outdoor Standard PTZ">
+        <div class="product-badge">IP66</div>
+      </div>
+      <div class="product-info">
+        <div class="product-cat">Outdoor · PTZ</div>
+        <div class="product-name">Outdoor Standard PTZ</div>
+        <div class="product-desc">Advanced perimeter security with dual-antenna WiFi, starlight night vision up to 100ft, and IP66 weatherproofing.</div>
+        <div class="product-features">
+          <span class="feat-tag">IP66</span>
+          <span class="feat-tag">Starlight</span>
+          <span class="feat-tag">Dual Antenna</span>
+          <span class="feat-tag">Siren</span>
+        </div>
+        <div class="product-footer">
+          <div class="product-price">Inquire for Price</div>
+          <button class="btn-inquire" onclick="openModal('Outdoor Standard PTZ Series')">Inquire</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Outdoor Pro Wall-Mount -->
+    <div class="product-card" data-tags="outdoor ptz">
+      <div class="product-img">
+        <img src="/mnt/user-data/uploads/9.png" alt="Outdoor Pro Wall-Mount PTZ">
+        <div class="product-badge">Pro Series</div>
+      </div>
+      <div class="product-info">
+        <div class="product-cat">Outdoor · Pro PTZ</div>
+        <div class="product-name">Outdoor Pro Wall-Mount PTZ</div>
+        <div class="product-desc">High-capacity pro exterior camera with AI human & vehicle detection, auto smart tracking, and ultra HD encryption.</div>
+        <div class="product-features">
+          <span class="feat-tag">Auto Track</span>
+          <span class="feat-tag">Ultra HD</span>
+          <span class="feat-tag">AI Vehicle</span>
+          <span class="feat-tag">Deterrence</span>
+        </div>
+        <div class="product-footer">
+          <div class="product-price">Inquire for Price</div>
+          <button class="btn-inquire" onclick="openModal('Outdoor Pro Wall-Mount PTZ Series')">Inquire</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Indoor HD Turret PT -->
+    <div class="product-card" data-tags="indoor wifi ptz">
+      <div class="product-img">
+        <img src="/mnt/user-data/uploads/10.png" alt="Indoor HD Turret PT">
+        <div class="product-badge">Turret PT</div>
+      </div>
+      <div class="product-info">
+        <div class="product-cat">Indoor · PTZ Turret</div>
+        <div class="product-name">Indoor HD Turret PT</div>
+        <div class="product-desc">Ceiling-mount turret with dual-band WiFi, AI human & vehicle detection, auto tracking, and encrypted UHD streaming.</div>
+        <div class="product-features">
+          <span class="feat-tag">Dual-Band</span>
+          <span class="feat-tag">Auto Track</span>
+          <span class="feat-tag">Encrypted</span>
+          <span class="feat-tag">Two-Way Audio</span>
+        </div>
+        <div class="product-footer">
+          <div class="product-price">Inquire for Price</div>
+          <button class="btn-inquire" onclick="openModal('Indoor HD Turret PT Series')">Inquire</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Outdoor Integrated Bracket PT -->
+    <div class="product-card" data-tags="outdoor wifi ptz">
+      <div class="product-img">
+        <img src="/mnt/user-data/uploads/11.png" alt="Outdoor Integrated Bracket PT">
+        <div class="product-badge">Dual Lens</div>
+      </div>
+      <div class="product-info">
+        <div class="product-cat">Outdoor · PTZ</div>
+        <div class="product-name">Outdoor Integrated Bracket PT</div>
+        <div class="product-desc">Dual-sensor exterior PTZ with auto smart tracking, active deterrence siren & light, and full 360° outdoor coverage.</div>
+        <div class="product-features">
+          <span class="feat-tag">Dual Sensor</span>
+          <span class="feat-tag">360° PTZ</span>
+          <span class="feat-tag">Auto Track</span>
+          <span class="feat-tag">Siren+Light</span>
+        </div>
+        <div class="product-footer">
+          <div class="product-price">Inquire for Price</div>
+          <button class="btn-inquire" onclick="openModal('Outdoor Integrated Bracket PT Series')">Inquire</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- WiFi Camera Overview -->
+    <div class="product-card" data-tags="indoor outdoor wifi">
+      <div class="product-img">
+        <img src="/mnt/user-data/uploads/13.png" alt="WiFi Camera Bundle">
+        <div class="product-badge">Bundle</div>
+      </div>
+      <div class="product-info">
+        <div class="product-cat">WiFi · Indoor & Outdoor</div>
+        <div class="product-name">WiFi Camera Complete Line</div>
+        <div class="product-desc">Full lineup: Hero H31, H3A/H5A, Hero A1, Hero D1 (dual), PICOO, and Pro Wall-Mount for total indoor & outdoor coverage.</div>
+        <div class="product-features">
+          <span class="feat-tag">6 Models</span>
+          <span class="feat-tag">H.265+</span>
+          <span class="feat-tag">App Access</span>
+          <span class="feat-tag">AI Detection</span>
+        </div>
+        <div class="product-footer">
+          <div class="product-price">Package Deals</div>
+          <button class="btn-inquire" onclick="openModal('WiFi Camera Package (Complete Line)')">Inquire</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- SERVICES -->
+<section id="services">
+  <div class="section-head">
+    <div class="section-tag">// Our Services</div>
+    <h2>Installation & Support</h2>
+    <p>End-to-end security solutions from consultation to post-installation maintenance.</p>
+  </div>
+  <div class="services-grid">
+    <div class="service-card">
+      <div class="service-icon">🏠</div>
+      <h3>Residential Installation</h3>
+      <p>Complete home security setup with camera placement consultation, cable management, and app configuration for mobile monitoring.</p>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">🏢</div>
+      <h3>Commercial & Business</h3>
+      <p>Enterprise-grade CCTV systems for offices, warehouses, and retail with NVR setup, perimeter protection, and multi-site management.</p>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">📡</div>
+      <h3>Network & WiFi Setup</h3>
+      <p>Ruijie Reyee networking solutions to ensure stable, high-speed connectivity for all your cameras and security devices.</p>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">🔧</div>
+      <h3>Maintenance & Repair</h3>
+      <p>Scheduled preventive maintenance, camera cleaning, firmware updates, and repair services to keep your system running perfectly.</p>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">☁️</div>
+      <h3>Cloud Storage Setup</h3>
+      <p>Configure secure remote cloud recording with easy playback and sharing — never lose footage even if hardware is compromised.</p>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">🎓</div>
+      <h3>Training & Consultation</h3>
+      <p>Free on-site security audit and user training so you and your team can fully utilize every feature of your security system.</p>
+    </div>
+  </div>
+</section>
+
+<!-- WHY US -->
+<div class="whyus" id="whyus">
+  <div class="whyus-inner">
+    <div class="whyus-text">
+      <div class="section-tag">// Why KSAP</div>
+      <h2>Your Trusted <span class="red">Security Partner</span></h2>
+      <p>We don't just sell cameras — we design complete security ecosystems tailored to your space, budget, and lifestyle.</p>
+      <div class="whyus-points">
+        <div class="why-point">
+          <div class="why-num">01</div>
+          <div>
+            <h4>Authorized Dealer</h4>
+            <p>Official distributor of Dahua, Hikvision, Imou, Seagate, ZKTeco, and more — guaranteed genuine products with full warranty.</p>
+          </div>
+        </div>
+        <div class="why-point">
+          <div class="why-num">02</div>
+          <div>
+            <h4>Expert Installation Team</h4>
+            <p>Certified technicians with years of hands-on experience in residential, commercial, and enterprise deployments.</p>
+          </div>
+        </div>
+        <div class="why-point">
+          <div class="why-num">03</div>
+          <div>
+            <h4>After-Sales Support</h4>
+            <p>We stay with you after installation — 24/7 remote assistance, on-site visits, and long-term maintenance contracts.</p>
+          </div>
+        </div>
+        <div class="why-point">
+          <div class="why-num">04</div>
+          <div>
+            <h4>Competitive Pricing</h4>
+            <p>Best value packages for every budget. Get a free site survey and custom quote with no hidden charges.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="whyus-brands">
+      <div class="brand-card"><div class="bname">DAHUA</div><div class="bsub">Technology</div></div>
+      <div class="brand-card"><div class="bname">HIKVISION</div><div class="bsub">Security</div></div>
+      <div class="brand-card"><div class="bname">IMOU</div><div class="bsub">Smart Home</div></div>
+      <div class="brand-card"><div class="bname">SEAGATE</div><div class="bsub">Storage</div></div>
+      <div class="brand-card"><div class="bname">ZKTECO</div><div class="bsub">Access Control</div></div>
+      <div class="brand-card"><div class="bname">REYEE</div><div class="bsub">Networking</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- INQUIRE SECTION -->
+<div class="inquire-section" id="inquire">
+  <div class="inquire-inner">
+    <div class="section-tag">// Contact Us</div>
+    <h2>Ready to Secure Your Space?</h2>
+    <p>Scan the QR code to reach us instantly, or fill in the inquiry form and our team will get back to you within the day.</p>
+    <div class="inquire-grid">
+      <div class="qr-box">
+        <img src="/mnt/user-data/uploads/699186744_1482693103653592_6541242170653532552_n.jpg" alt="KSAP Inquiry QR Code">
+        <p>Scan to Inquire Now</p>
+        <button class="btn-primary" onclick="openModal('General Inquiry')" style="margin-top:0.5rem;">Or Fill a Form</button>
+      </div>
+      <div class="contact-info">
+        <div class="contact-row">
+          <div class="contact-icon">📍</div>
+          <div>
+            <h4>Location</h4>
+            <p>Philippines — serving Metro Manila and nearby areas</p>
+          </div>
+        </div>
+        <div class="contact-row">
+          <div class="contact-icon">⏰</div>
+          <div>
+            <h4>Business Hours</h4>
+            <p>Monday – Saturday: 8:00 AM – 6:00 PM</p>
+          </div>
+        </div>
+        <div class="contact-row">
+          <div class="contact-icon">🛡️</div>
+          <div>
+            <h4>Warranty</h4>
+            <p>All products come with official manufacturer warranty and local KSAP service guarantee.</p>
+          </div>
+        </div>
+        <div class="contact-row">
+          <div class="contact-icon">🚚</div>
+          <div>
+            <h4>Free Site Survey</h4>
+            <p>Book a free on-site security assessment before committing to any purchase or installation.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo"><span>KSAP</span> CCTV SOLUTIONS</div>
+  <div class="footer-tagline">Protect What Matters Most</div>
+  <div class="footer-links">
+    <a href="#products">Products</a>
+    <a href="#services">Services</a>
+    <a href="#whyus">About</a>
+    <a href="#inquire">Contact</a>
+  </div>
+  <div class="footer-copy">© 2025 KSAP CCTV Solutions. Powered by Dahua Technology. All rights reserved.</div>
+</footer>
+
+<!-- INQUIRE MODAL -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModalOutside(event)">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div class="modal-product" id="modalProduct">Product Inquiry</div>
+    <h3>Get a Free Quote</h3>
+
+    <label>Your Name</label>
+    <input type="text" placeholder="Juan dela Cruz">
+
+    <label>Contact Number</label>
+    <input type="text" placeholder="+63 9XX XXX XXXX">
+
+    <label>Location / Area</label>
+    <input type="text" placeholder="Quezon City, Metro Manila">
+
+    <label>Inquiry Type</label>
+    <select>
+      <option>Product Purchase</option>
+      <option>Installation Service</option>
+      <option>Site Survey (Free)</option>
+      <option>After-Sales / Repair</option>
+      <option>General Inquiry</option>
+    </select>
+
+    <label>Message</label>
+    <textarea placeholder="Tell us more about your security needs..."></textarea>
+
+    <div class="modal-footer">
+      <button class="btn-submit" onclick="submitInquiry()">Send Inquiry</button>
+    </div>
+  </div>
+</div>
+
+<script>
+function openModal(product) {
+  document.getElementById('modalProduct').textContent = product || 'General Inquiry';
+  document.getElementById('modalOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeModal() {
+  document.getElementById('modalOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+function closeModalOutside(e) {
+  if(e.target === document.getElementById('modalOverlay')) closeModal();
+}
+function submitInquiry() {
+  alert('Thank you for your inquiry! Our KSAP team will contact you within the day. You may also scan the QR code for faster response.');
+  closeModal();
+}
+function filterProducts(tag, btn) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.product-card').forEach(card => {
+    if(tag === 'all' || card.dataset.tags.includes(tag)) {
+      card.style.display = 'flex';
+    } else {
+      card.style.display = 'none';
+    }
+  });
+}
+</script>
+</body>
+</html>
